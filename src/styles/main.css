@@ -1,0 +1,22 @@
+@import-normalize;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+  margin: 0 1rem;
+  font-family: Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #181818;
+  color: #ffffff;
+}
+
+::selection {
+  background-color: rgba(201, 165, 219, 0.9);
+  color: rgb(15, 15, 15);
+}
+
+@media (min-width: 1280px) {
+  body {
+    margin: 1rem 20rem;
+  }
+}
