@@ -55,6 +55,7 @@ export const getPlaylistVideosData = async (playlistId) => {
       res.videos.push({
         id: item.id,
         title: item.snippet.title,
+        publishedAt: item.snippet.publishedAt,
         duration: dayjs.duration(item.contentDetails.duration).asSeconds(),
         views: item.statistics.viewCount,
       });

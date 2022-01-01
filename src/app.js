@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import dayjs from 'dayjs';
 
 import styles from './app.module.css';
 
@@ -33,6 +34,12 @@ const App = () => {
         ? [...response].sort((a, b) => b.views - a.views)
         : formData.sortBy === 'duration'
         ? [...response].sort((a, b) => b.duration - a.duration)
+        : formData.sortBy === 'title'
+        ? [...response].sort((a, b) => a.title.localeCompare(b.title))
+        : formData.sortBy === 'date'
+        ? [...response].sort(
+            (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+          )
         : response;
   }
 
@@ -101,6 +108,8 @@ const App = () => {
         >
           <option value='views'>Views</option>
           <option value='duration'>Duration</option>
+          <option value='title'>Title</option>
+          <option value='date'>Date published</option>
           <option value='default'>Default</option>
         </select>
         <button
@@ -155,7 +164,8 @@ const App = () => {
                   <div>
                     <div className={styles.resultTitle}>{video.title} </div>{' '}
                     <div className={styles.resultDetails}>
-                      {formatNumber(video.views)} views
+                      {formatNumber(video.views)} views &middot;{' '}
+                      {dayjs(video.publishedAt).format('MMM D, YYYY')}
                     </div>
                   </div>
                 </a>
