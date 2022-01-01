@@ -21,6 +21,7 @@ const App = () => {
   const [formData, setFormData] = useState({
     playlistId: '',
     sortBy: 'views',
+    sortOrder: 'default',
     disabled: false,
   });
   const [loading, setLoading] = useState(null);
@@ -41,6 +42,9 @@ const App = () => {
             (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
           )
         : response;
+    if (formData.sortOrder === 'reversed') {
+      displayData.reverse();
+    }
   }
 
   const onChange = (e) => {
@@ -112,8 +116,28 @@ const App = () => {
           <option value='date'>Date published</option>
           <option value='default'>Default</option>
         </select>
+        {displayData.length > 0 && (
+          <button
+            type='button'
+            title='Reverse the order'
+            name='sortOrder'
+            id='sortOrder'
+            defaultValue={formData.sortOrder}
+            onClick={() =>
+              setFormData({
+                ...formData,
+                sortOrder:
+                  formData.sortOrder === 'default' ? 'reversed' : 'default',
+              })
+            }
+            className={styles.sortOrder}
+          >
+            ⇅
+          </button>
+        )}
         <button
           type='submit'
+          title='Submit'
           className={styles.submit}
           disabled={formData.disabled}
         >

@@ -23,6 +23,10 @@ select {
   border-radius: 2px;
 }
 
+button:hover {
+  background: rgba(160, 156, 156, 10%);
+}
+
 .results {
   display: flex;
   flex-direction: column;
@@ -144,6 +148,11 @@ select {
   padding: 5px 5px 5px;
   font-size: 1rem;
   font-family: inherit;
+}
+
+.sortOrder {
+  padding-top: 3px;
+  font-size: 1.3rem;
 }
 
 .submit {
