@@ -10,11 +10,11 @@ import { formatNumber } from './utils/format-views';
 import loadingSvg from './assets/loading.svg';
 
 const examplePlaylist = 'PLlaN88a7y2_q16UdiTcsWnr0gFIcDMhHX';
-const parsePlaylistId = (str) =>
-  str.replace(
-    /(https*:\/\/)*(www.)*youtube.com\/(watch\?v=[a-zA-Z0-9]+&list=|playlist\?list=)/,
-    ''
-  );
+const parsePlaylistId = (str) => {
+  if (!str) return examplePlaylist;
+  if (str.startsWith('PL')) return str;
+  return new URLSearchParams(new URL(str).search).get('list') || 'Invalid';
+};
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -51,20 +51,25 @@ const App = () => {
     setResponse([]);
     setFormData({ ...formData, disabled: true });
 
-    let res;
     let id = parsePlaylistId(formData.playlistId);
-    if (id) {
-      res = await getPlaylistVideosData(id);
+    if (id === 'Invalid') {
+      setError('Invalid URL');
     } else {
-      setFormData({ ...formData, playlistId: examplePlaylist, disabled: true });
-      res = await getPlaylistVideosData(examplePlaylist);
+      if (id === examplePlaylist) {
+        setFormData({
+          ...formData,
+          playlistId: examplePlaylist,
+          disabled: true,
+        });
+      }
+      let res = await getPlaylistVideosData(id);
+      if (res.error) {
+        setError(res.error);
+      } else {
+        setResponse(res.videos);
+      }
     }
 
-    if (res.error) {
-      setError(res.error);
-    } else {
-      setResponse(res.videos);
-    }
     setLoading(false);
   };
 
@@ -128,7 +133,7 @@ const App = () => {
           </div>
           <div className={styles.results}>
             {displayData.map((video, idx) => (
-              <div key={video.title} className={styles.result}>
+              <div key={video.id} className={styles.result}>
                 <a
                   href={`https://www.youtube.com/watch?v=${video.id}`}
                   target='_blank'
