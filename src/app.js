@@ -33,6 +33,10 @@ const App = () => {
     displayData =
       formData.sortBy === 'views'
         ? [...response].sort((a, b) => b.views - a.views)
+        : formData.sortBy === 'likes'
+        ? [...response].sort((a, b) => b.likes - a.likes)
+        : formData.sortBy === 'comments'
+        ? [...response].sort((a, b) => b.comments - a.comments)
         : formData.sortBy === 'duration'
         ? [...response].sort((a, b) => b.duration - a.duration)
         : formData.sortBy === 'title'
@@ -114,6 +118,8 @@ const App = () => {
           <option value='duration'>Duration</option>
           <option value='title'>Title</option>
           <option value='date'>Date published</option>
+          <option value='likes'>Likes</option>
+          <option value='comments'>Comments</option>
           <option value='default'>Default</option>
         </select>
         {displayData.length > 0 && (
@@ -190,6 +196,14 @@ const App = () => {
                     <div className={styles.resultDetails}>
                       {formatNumber(video.views)} views &middot;{' '}
                       {dayjs(video.publishedAt).format('MMM D, YYYY')}
+                      {(formData.sortBy === 'likes' ||
+                        formData.sortBy === 'comments') && (
+                        <>
+                          {' '}
+                          &middot; {formatNumber(video.likes)} likes &middot;{' '}
+                          {formatNumber(video.comments)} comments
+                        </>
+                      )}
                     </div>
                   </div>
                 </a>

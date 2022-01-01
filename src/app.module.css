@@ -56,6 +56,7 @@ button:hover {
 
 .resultLink {
   display: flex;
+  align-items: flex-start;
   gap: 10px;
   padding: 15px 0;
   border-bottom: 1px solid rgba(160, 156, 156, 20%);
@@ -82,12 +83,7 @@ button:hover {
 .resultDetails {
   opacity: 60%;
   font-size: 90%;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  white-space: wrap;
-  text-overflow: ellipsis;
+  line-height: 1.4rem;
 }
 
 .thumbnail {

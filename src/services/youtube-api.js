@@ -58,6 +58,8 @@ export const getPlaylistVideosData = async (playlistId) => {
         publishedAt: item.snippet.publishedAt,
         duration: dayjs.duration(item.contentDetails.duration).asSeconds(),
         views: item.statistics.viewCount,
+        likes: item.statistics.likeCount,
+        comments: item.statistics.commentCount,
       });
     });
 
