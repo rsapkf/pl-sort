@@ -22,3 +22,4 @@ yarn-error.log*
 
 .env
 .netlify
+extension/web-ext-artifacts

@@ -28,7 +28,7 @@ const App = () => {
   const [error, setError] = useState(null);
   const [response, setResponse] = useState([]);
 
-  let displayData;
+  let displayData = [];
   if (response) {
     displayData =
       formData.sortBy === 'views'
@@ -45,7 +45,8 @@ const App = () => {
         ? [...response].sort(
             (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
           )
-        : response;
+        : [...response];
+
     if (formData.sortOrder === 'reversed') {
       displayData.reverse();
     }
@@ -92,7 +93,7 @@ const App = () => {
     <div className={styles.container}>
       <h1>pl-sort</h1>
       <div>
-        <p>Sort YouTube playlists by views and duration.</p>
+        <p>Sort YouTube playlists by various metrics.</p>
         <div>
           <a href='https://github.com/rsapkf/pl-sort'>Source</a> <br />
         </div>
@@ -106,49 +107,51 @@ const App = () => {
           value={formData.playlistId}
           onChange={onChange}
           className={styles.playlistId}
+          autoFocus
         />
-        <select
-          name='sortBy'
-          id='sortBy'
-          defaultValue={formData.sortBy}
-          onChange={onChange}
-          className={styles.sortBy}
-        >
-          <option value='views'>Views</option>
-          <option value='duration'>Duration</option>
-          <option value='title'>Title</option>
-          <option value='date'>Date published</option>
-          <option value='likes'>Likes</option>
-          <option value='comments'>Comments</option>
-          <option value='default'>Default</option>
-        </select>
-        {displayData.length > 0 && (
-          <button
-            type='button'
-            title='Reverse the order'
-            name='sortOrder'
-            id='sortOrder'
-            defaultValue={formData.sortOrder}
-            onClick={() =>
-              setFormData({
-                ...formData,
-                sortOrder:
-                  formData.sortOrder === 'default' ? 'reversed' : 'default',
-              })
-            }
-            className={styles.sortOrder}
+        <div className={styles.options}>
+          <select
+            name='sortBy'
+            id='sortBy'
+            defaultValue={formData.sortBy}
+            onChange={onChange}
+            className={styles.sortBy}
           >
-            ⇅
+            <option value='views'>Views</option>
+            <option value='duration'>Duration</option>
+            <option value='title'>Title</option>
+            <option value='date'>Date published</option>
+            <option value='likes'>Likes</option>
+            <option value='comments'>Comments</option>
+            <option value='default'>Default</option>
+          </select>
+          {displayData.length > 0 && (
+            <button
+              type='button'
+              title='Reverse the order'
+              name='sortOrder'
+              id='sortOrder'
+              onClick={() =>
+                setFormData((formData) => ({
+                  ...formData,
+                  sortOrder:
+                    formData.sortOrder === 'default' ? 'reversed' : 'default',
+                }))
+              }
+              className={styles.sortOrder}
+            >
+              ⇅
+            </button>
+          )}
+          <button
+            type='submit'
+            title='Submit'
+            className={styles.submit}
+            disabled={formData.disabled}
+          >
+            Sort
           </button>
-        )}
-        <button
-          type='submit'
-          title='Submit'
-          className={styles.submit}
-          disabled={formData.disabled}
-        >
-          Sort
-        </button>
+        </div>
       </form>
       {loading && (
         <div className={styles.loading}>

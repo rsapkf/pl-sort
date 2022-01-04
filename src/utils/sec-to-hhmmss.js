@@ -5,7 +5,7 @@ export const secToHHMMSS = (totalSeconds) => {
   let seconds = Math.floor(totalSeconds % 60);
 
   hours = hours === 0 ? `` : `${hours}:`;
-  minutes = minutes < 1 ? `0` : minutes;
+  minutes = hours && minutes < 10 ? `0${minutes}` : minutes;
   seconds = seconds < 10 ? `0${seconds}` : seconds;
 
   return `${hours}${minutes}:${seconds}`;

@@ -1,6 +1,6 @@
 # pl-sort
 
-[pl-sort](https://pl-sort.netlify.app) lets you sort public YouTube playlists by various metrics. It supports sorting by:
+[pl-sort](https://pl-sort.netlify.app) lets you sort public YouTube playlists by:
 
 - Views
 - Duration

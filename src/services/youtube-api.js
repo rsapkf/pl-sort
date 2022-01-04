@@ -29,9 +29,8 @@ export const getPlaylistVideosData = async (playlistId) => {
       break;
     }
 
-    let videoIds = [];
-    playlistRes.data.items.forEach((item) =>
-      videoIds.push(item.contentDetails.videoId)
+    const videoIds = playlistRes.data.items.map(
+      (item) => item.contentDetails.videoId
     );
 
     let vidRes;
