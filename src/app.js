@@ -11,6 +11,7 @@ import { formatNumber } from './utils/format-views';
 import loadingSvg from './assets/loading.svg';
 
 const examplePlaylist = 'PLlaN88a7y2_q16UdiTcsWnr0gFIcDMhHX';
+const idFromUrl = new URLSearchParams(window.location.search).get('id');
 const parsePlaylistId = (str) => {
   if (!str) return examplePlaylist;
   if (str.startsWith('PL')) return str;
@@ -19,7 +20,7 @@ const parsePlaylistId = (str) => {
 
 const App = () => {
   const [formData, setFormData] = useState({
-    playlistId: '',
+    playlistId: idFromUrl,
     sortBy: 'views',
     sortOrder: 'default',
     disabled: false,
