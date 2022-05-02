@@ -140,6 +140,10 @@ const App = () => {
                 }))
               }
               className={styles.sortOrder}
+              style={{
+                background:
+                  formData.sortOrder === 'reversed' ? '#1d1e2b' : 'transparent',
+              }}
             >
               ⇅
             </button>
