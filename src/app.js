@@ -162,9 +162,17 @@ const App = () => {
       {displayData.length > 0 && (
         <>
           <div>
-            {displayData.length} videos ·{' '}
+            Length:{' '}
+            <b>
+              {secToHHMMSS(
+                displayData
+                  .map((item) => item.duration)
+                  .reduce((a, b) => a + b, 0)
+              )}
+            </b>{' '}
+            (<b>{displayData.length}</b> videos) &middot;{' '}
             <a
-              href={`https://youtube.com/playlist?list=${
+              href={`https://www.youtube.com/playlist?list=${
                 parsePlaylistId(formData.playlistId) || examplePlaylist
               }`}
               target='_blank'
