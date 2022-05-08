@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
     "name": "pl-sort",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Sort YouTube playlists by various metrics.",
-    "homepage_url": "https://github.com/rsapkf/pl-sort/extension",
+    "homepage_url": "https://github.com/rsapkf/pl-sort/tree/main/extension",
     "background": {
         "scripts": [
             "background.js"
