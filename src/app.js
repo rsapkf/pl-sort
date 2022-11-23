@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import dayjs from 'dayjs';
+import React, { useState } from 'react'
+import dayjs from 'dayjs'
 
-import styles from './app.module.css';
+import styles from './app.module.css'
 
-import { getPlaylistVideosData } from './services/youtube-api';
+import { getPlaylistVideosData } from './services/youtube-api'
 
-import { secToHHMMSS } from './utils/sec-to-hhmmss';
-import { formatNumber } from './utils/format-views';
+import { secToHHMMSS } from './utils/sec-to-hhmmss'
+import { formatNumber } from './utils/format-views'
 
-import loadingSvg from './assets/loading.svg';
+import loadingSvg from './assets/loading.svg'
 
-const examplePlaylist = 'PLlaN88a7y2_q16UdiTcsWnr0gFIcDMhHX';
-const idFromUrl = new URLSearchParams(window.location.search).get('id');
+const examplePlaylist = 'PLlaN88a7y2_q16UdiTcsWnr0gFIcDMhHX'
+const idFromUrl = new URLSearchParams(window.location.search).get('id')
 const parsePlaylistId = (str) => {
-  if (!str) return examplePlaylist;
-  if (str.startsWith('PL')) return str;
-  return new URLSearchParams(new URL(str).search).get('list') || 'Invalid';
-};
+  if (!str) return examplePlaylist
+  if (str.startsWith('PL')) return str
+  return new URLSearchParams(new URL(str).search).get('list') || 'Invalid'
+}
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -24,12 +24,12 @@ const App = () => {
     sortBy: 'views',
     sortOrder: 'default',
     disabled: false,
-  });
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
-  const [response, setResponse] = useState([]);
+  })
+  const [loading, setLoading] = useState(null)
+  const [error, setError] = useState(null)
+  const [response, setResponse] = useState([])
 
-  let displayData = [];
+  let displayData = []
   if (response) {
     displayData =
       formData.sortBy === 'views'
@@ -46,10 +46,10 @@ const App = () => {
         ? [...response].sort(
             (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
           )
-        : [...response];
+        : [...response]
 
     if (formData.sortOrder === 'reversed') {
-      displayData.reverse();
+      displayData.reverse()
     }
   }
 
@@ -58,37 +58,37 @@ const App = () => {
       ...formData,
       [e.target.name]: e.target.value,
       disabled: false,
-    });
-  };
+    })
+  }
 
   const onSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    setResponse([]);
-    setFormData({ ...formData, disabled: true });
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+    setResponse([])
+    setFormData({ ...formData, disabled: true })
 
-    let id = parsePlaylistId(formData.playlistId);
+    let id = parsePlaylistId(formData.playlistId)
     if (id === 'Invalid') {
-      setError('Invalid URL');
+      setError('Invalid URL')
     } else {
       if (id === examplePlaylist) {
         setFormData({
           ...formData,
           playlistId: examplePlaylist,
           disabled: true,
-        });
+        })
       }
-      let res = await getPlaylistVideosData(id);
+      let res = await getPlaylistVideosData(id)
       if (res.error) {
-        setError(res.error);
+        setError(res.error)
       } else {
-        setResponse(res.videos);
+        setResponse(res.videos)
       }
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   return (
     <div className={styles.container}>
@@ -96,15 +96,15 @@ const App = () => {
       <div>
         <p>Sort YouTube playlists by various metrics.</p>
         <div>
-          <a href='https://github.com/rsapkf/pl-sort'>Source</a> <br />
+          <a href="https://github.com/rsapkf/pl-sort">Source</a> <br />
         </div>
       </div>
       <form onSubmit={onSubmit} className={styles.form}>
         <input
-          type='text'
-          name='playlistId'
-          id='playlistId'
-          placeholder='Playlist id or link (Click Sort for demo)'
+          type="text"
+          name="playlistId"
+          id="playlistId"
+          placeholder="Playlist id or link (Click Sort for demo)"
           value={formData.playlistId}
           onChange={onChange}
           className={styles.playlistId}
@@ -112,26 +112,26 @@ const App = () => {
         />
         <div className={styles.options}>
           <select
-            name='sortBy'
-            id='sortBy'
+            name="sortBy"
+            id="sortBy"
             defaultValue={formData.sortBy}
             onChange={onChange}
             className={styles.sortBy}
           >
-            <option value='views'>Views</option>
-            <option value='duration'>Duration</option>
-            <option value='title'>Title</option>
-            <option value='date'>Date published</option>
-            <option value='likes'>Likes</option>
-            <option value='comments'>Comments</option>
-            <option value='default'>Default</option>
+            <option value="views">Views</option>
+            <option value="duration">Duration</option>
+            <option value="title">Title</option>
+            <option value="date">Date published</option>
+            <option value="likes">Likes</option>
+            <option value="comments">Comments</option>
+            <option value="default">Default</option>
           </select>
           {displayData.length > 0 && (
             <button
-              type='button'
-              title='Reverse the order'
-              name='sortOrder'
-              id='sortOrder'
+              type="button"
+              title="Reverse the order"
+              name="sortOrder"
+              id="sortOrder"
               onClick={() =>
                 setFormData((formData) => ({
                   ...formData,
@@ -142,15 +142,15 @@ const App = () => {
               className={styles.sortOrder}
               style={{
                 background:
-                  formData.sortOrder === 'reversed' ? '#1d1e2b' : 'transparent',
+                  formData.sortOrder === 'reversed' ? '#303030' : 'transparent',
               }}
             >
               ⇅
             </button>
           )}
           <button
-            type='submit'
-            title='Submit'
+            type="submit"
+            title="Submit"
             className={styles.submit}
             disabled={formData.disabled}
           >
@@ -160,7 +160,7 @@ const App = () => {
       </form>
       {loading && (
         <div className={styles.loading}>
-          <img src={loadingSvg} alt='Loading' />
+          <img src={loadingSvg} alt="Loading" />
         </div>
       )}
       {error && <div className={styles.error}>{error}</div>}
@@ -180,10 +180,10 @@ const App = () => {
               href={`https://www.youtube.com/playlist?list=${
                 parsePlaylistId(formData.playlistId) || examplePlaylist
               }`}
-              target='_blank'
-              rel='noreferrer noopener'
+              target="_blank"
+              rel="noreferrer noopener"
             >
-              Visit on YouTube
+              View on YouTube
             </a>
           </div>
           <div className={styles.results}>
@@ -191,8 +191,8 @@ const App = () => {
               <div key={video.id} className={styles.result}>
                 <a
                   href={`https://www.youtube.com/watch?v=${video.id}`}
-                  target='_blank'
-                  rel='noreferrer noopener'
+                  target="_blank"
+                  rel="noreferrer noopener"
                   className={styles.resultLink}
                 >
                   <div className={styles.resultIndex}>{idx + 1}</div>
@@ -200,7 +200,7 @@ const App = () => {
                     <img
                       src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
                       alt={`Link to YouTube`}
-                      loading='lazy'
+                      loading="lazy"
                       className={styles.img}
                     />
                     <div className={styles.duration}>
@@ -229,7 +229,7 @@ const App = () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
