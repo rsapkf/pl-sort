@@ -1,55 +1,55 @@
-import React, { useState } from 'react'
-import dayjs from 'dayjs'
+import React, { useState } from "react";
+import dayjs from "dayjs";
 
-import styles from './app.module.css'
+import styles from "./app.module.css";
 
-import { getPlaylistVideosData } from './services/youtube-api'
+import { getPlaylistVideosData } from "./services/youtube-api";
 
-import { secToHHMMSS } from './utils/sec-to-hhmmss'
-import { formatNumber } from './utils/format-views'
+import { secToHHMMSS } from "./utils/sec-to-hhmmss";
+import { formatNumber } from "./utils/format-views";
 
-import loadingSvg from './assets/loading.svg'
+import loadingSvg from "./assets/loading.svg";
 
-const examplePlaylist = 'PLlaN88a7y2_q16UdiTcsWnr0gFIcDMhHX'
-const idFromUrl = new URLSearchParams(window.location.search).get('id')
+const examplePlaylist = "PLlaN88a7y2_q16UdiTcsWnr0gFIcDMhHX";
+const idFromUrl = new URLSearchParams(window.location.search).get("id");
 const parsePlaylistId = (str) => {
-  if (!str) return examplePlaylist
-  if (str.startsWith('PL')) return str
-  return new URLSearchParams(new URL(str).search).get('list') || 'Invalid'
-}
+  if (!str) return examplePlaylist;
+  if (str.startsWith("PL")) return str;
+  return new URLSearchParams(new URL(str).search).get("list") || "Invalid";
+};
 
 const App = () => {
   const [formData, setFormData] = useState({
     playlistId: idFromUrl,
-    sortBy: 'views',
-    sortOrder: 'default',
+    sortBy: "views",
+    sortOrder: "default",
     disabled: false,
-  })
-  const [loading, setLoading] = useState(null)
-  const [error, setError] = useState(null)
-  const [response, setResponse] = useState([])
+  });
+  const [loading, setLoading] = useState(null);
+  const [error, setError] = useState(null);
+  const [response, setResponse] = useState([]);
 
-  let displayData = []
+  let displayData = [];
   if (response) {
     displayData =
-      formData.sortBy === 'views'
+      formData.sortBy === "views"
         ? [...response].sort((a, b) => b.views - a.views)
-        : formData.sortBy === 'likes'
+        : formData.sortBy === "likes"
         ? [...response].sort((a, b) => b.likes - a.likes)
-        : formData.sortBy === 'comments'
+        : formData.sortBy === "comments"
         ? [...response].sort((a, b) => b.comments - a.comments)
-        : formData.sortBy === 'duration'
+        : formData.sortBy === "duration"
         ? [...response].sort((a, b) => b.duration - a.duration)
-        : formData.sortBy === 'title'
+        : formData.sortBy === "title"
         ? [...response].sort((a, b) => a.title.localeCompare(b.title))
-        : formData.sortBy === 'date'
+        : formData.sortBy === "date"
         ? [...response].sort(
             (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
           )
-        : [...response]
+        : [...response];
 
-    if (formData.sortOrder === 'reversed') {
-      displayData.reverse()
+    if (formData.sortOrder === "reversed") {
+      displayData.reverse();
     }
   }
 
@@ -58,37 +58,37 @@ const App = () => {
       ...formData,
       [e.target.name]: e.target.value,
       disabled: false,
-    })
-  }
+    });
+  };
 
   const onSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-    setResponse([])
-    setFormData({ ...formData, disabled: true })
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    setResponse([]);
+    setFormData({ ...formData, disabled: true });
 
-    let id = parsePlaylistId(formData.playlistId)
-    if (id === 'Invalid') {
-      setError('Invalid URL')
+    let id = parsePlaylistId(formData.playlistId);
+    if (id === "Invalid") {
+      setError("Invalid URL");
     } else {
       if (id === examplePlaylist) {
         setFormData({
           ...formData,
           playlistId: examplePlaylist,
           disabled: true,
-        })
+        });
       }
-      let res = await getPlaylistVideosData(id)
+      let res = await getPlaylistVideosData(id);
       if (res.error) {
-        setError(res.error)
+        setError(res.error);
       } else {
-        setResponse(res.videos)
+        setResponse(res.videos);
       }
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -136,13 +136,13 @@ const App = () => {
                 setFormData((formData) => ({
                   ...formData,
                   sortOrder:
-                    formData.sortOrder === 'default' ? 'reversed' : 'default',
+                    formData.sortOrder === "default" ? "reversed" : "default",
                 }))
               }
               className={styles.sortOrder}
               style={{
                 background:
-                  formData.sortOrder === 'reversed' ? '#303030' : 'transparent',
+                  formData.sortOrder === "reversed" ? "#303030" : "transparent",
               }}
             >
               ⇅
@@ -167,15 +167,15 @@ const App = () => {
       {displayData.length > 0 && (
         <>
           <div>
-            Length:{' '}
+            Length:{" "}
             <b>
               {secToHHMMSS(
                 displayData
                   .map((item) => item.duration)
                   .reduce((a, b) => a + b, 0)
               )}
-            </b>{' '}
-            (<b>{displayData.length}</b> videos) &middot;{' '}
+            </b>{" "}
+            (<b>{displayData.length}</b> videos) &middot;{" "}
             <a
               href={`https://www.youtube.com/playlist?list=${
                 parsePlaylistId(formData.playlistId) || examplePlaylist
@@ -208,18 +208,14 @@ const App = () => {
                     </div>
                   </div>
                   <div>
-                    <div className={styles.resultTitle}>{video.title} </div>{' '}
+                    <div className={styles.resultTitle}>{video.title} </div>{" "}
                     <div className={styles.resultDetails}>
-                      {formatNumber(video.views)} views &middot;{' '}
-                      {dayjs(video.publishedAt).format('MMM D, YYYY')}
-                      {(formData.sortBy === 'likes' ||
-                        formData.sortBy === 'comments') && (
-                        <>
-                          {' '}
-                          &middot; {formatNumber(video.likes)} likes &middot;{' '}
-                          {formatNumber(video.comments)} comments
-                        </>
-                      )}
+                      {formatNumber(video.views)} views &middot;{" "}
+                      {dayjs(video.publishedAt).format("MMM D, YYYY")} &middot;{" "}
+                      {formatNumber(video.likes)} like
+                      {video.likes > 1 ? "s" : ""} &middot;{" "}
+                      {formatNumber(video.comments)} comment
+                      {video.comments > 1 ? "s" : ""}
                     </div>
                   </div>
                 </a>
@@ -229,7 +225,7 @@ const App = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
