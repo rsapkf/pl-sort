@@ -175,7 +175,8 @@ const App = () => {
                   .reduce((a, b) => a + b, 0)
               )}
             </b>{" "}
-            (<b>{displayData.length}</b> videos) &middot;{" "}
+            (<b>{displayData.length}</b> video
+            {displayData.length > 1 ? "s" : ""}) &middot;{" "}
             <a
               href={`https://www.youtube.com/playlist?list=${
                 parsePlaylistId(formData.playlistId) || examplePlaylist
